@@ -38,5 +38,6 @@ void Utils_randInit(void);
 int Utils_rand(int min, int max);
 
 bool Utils_equalColors(SDL_Color color1, SDL_Color color2);
+void assign_color(SDL_Color *color1, SDL_Color color2);
 
 #endif // UTILS_H

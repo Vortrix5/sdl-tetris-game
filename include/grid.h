@@ -47,7 +47,7 @@ struct Grid
     int yCells;
 
     // Cells boder thickness and color
-    unsigned int cellsBorder;
+    float cellsBorder;
     SDL_Color cellsBorderColor;
 
     // Matrix of Cells

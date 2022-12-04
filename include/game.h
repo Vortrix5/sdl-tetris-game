@@ -22,6 +22,6 @@ typedef struct Shape Shape;
 
 void Generate_shape(int type,Shape *shape);
 bool Game_start(SDL_Renderer *renderer, int w, int h);
-
+void flipShape(Shape *shape);
 
 #endif // GAME_H
