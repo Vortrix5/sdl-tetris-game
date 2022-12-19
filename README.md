@@ -42,20 +42,17 @@ As the Tetrominoes start to fall, players can use the following keybinds to move
 | Triple | 500 × level|
 | Tetris | 800 × level; difficult |
 
+## Implementation
+
+To implement the mechanics of this game, we utilized C structs to represent the shapes and grids. The game constantly checks the number of blocks in each row, clearing the row and shifting all blocks above it downward when the maximum number is reached. 
+
+Collision detection is also an integral part of the game - during each fall, the surrounding blocks are checked for colored properties, with the Tetromino coming to a halt and a new one being generated if a collision is detected. The game ends when the Tetrominoes reach the maximum height.
 
 ## Acknowledgements
 A special thanks goes to our CS Lab Professor **Amine Ben Hassouna**, whose library (basic-c-sdl-game) was instrumental in the development of this game.
 
  - [@aminosbh](https://github.com/aminosbh)
  - [aminosbh/basic-c-sdl-project](https://github.com/aminosbh/basic-c-sdl-project)
- 
-
-
-## Implementation
-
-To implement the mechanics of this game, we utilized C structs to represent the shapes and grids. The game constantly checks the number of blocks in each row, clearing the row and shifting all blocks above it downward when the maximum number is reached. 
-
-Collision detection is also an integral part of the game - during each fall, the surrounding blocks are checked for colored properties, with the Tetromino coming to a halt and a new one being generated if a collision is detected. The game ends when the Tetrominoes reach the maximum height.
 
 
 ## Feedback
