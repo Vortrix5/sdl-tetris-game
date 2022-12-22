@@ -31,6 +31,8 @@ As the Tetrominoes start to fall, players can use the following keybinds to move
 - **Left Arrow** ⬅️: Move the Tetromino to the left
 - **Down Arrow** ⬇️: Speed up the descent of the Tetromino
 - **Space Bar** : Rotate the Tetromino 90 degrees
+- **Escape** : Pause/Unpause the game
+
 
 ## 🪙 Scoring System 
 
