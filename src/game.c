@@ -1,103 +1,103 @@
 #include "game.h"
 
-void Generate_shape(int type,Shape *shape){
-    SDL_Color colours[7]={COLOR_RED, COLOR_GREEN, COLOR_BLUE, COLOR_ORANGE,COLOR_YELLOW};
-    SDL_Color color=colours[rand()%5];
+void Generate_shape(int type, Shape *shape) {
+    SDL_Color colours[7] = {COLOR_RED, COLOR_GREEN, COLOR_BLUE, COLOR_ORANGE, COLOR_YELLOW};
+    SDL_Color color = colours[rand() % 5];
     switch (type) {
         case 0:
-            shape->w=4;
-            shape->h=1;
+            shape->w = 4;
+            shape->h = 1;
 
-            shape->blocks[0]=4;
+            shape->blocks[0] = 4;
 
-            shape->start[0]=0;
+            shape->start[0] = 0;
 
-            shape->color=color;
+            shape->color = color;
             break;
         case 1:
-            shape->w=2;
-            shape->h=2;
+            shape->w = 2;
+            shape->h = 2;
 
-            shape->blocks[0]=2;
-            shape->blocks[1]=2;
+            shape->blocks[0] = 2;
+            shape->blocks[1] = 2;
 
-            shape->start[0]=0;
-            shape->start[1]=0;
+            shape->start[0] = 0;
+            shape->start[1] = 0;
 
-            shape->color=color;
+            shape->color = color;
             break;
         case 2:
-            shape->w=3;
-            shape->h=2;
+            shape->w = 3;
+            shape->h = 2;
 
-            shape->blocks[0]=1;
-            shape->blocks[1]=3;
+            shape->blocks[0] = 1;
+            shape->blocks[1] = 3;
 
-            shape->start[0]=0;
-            shape->start[1]=0;
+            shape->start[0] = 0;
+            shape->start[1] = 0;
 
-            shape->color=color;
+            shape->color = color;
             break;
         case 3:
-            shape->w=3;
-            shape->h=2;
-            shape->blocks[0]=1;
-            shape->blocks[1]=3;
+            shape->w = 3;
+            shape->h = 2;
+            shape->blocks[0] = 1;
+            shape->blocks[1] = 3;
 
-            shape->start[0]=2;
-            shape->start[1]=0;
+            shape->start[0] = 2;
+            shape->start[1] = 0;
 
-            shape->color=color;
+            shape->color = color;
             break;
         case 4:
-            shape->w=3;
-            shape->h=2;
-            shape->blocks[0]=2;
-            shape->blocks[1]=2;
+            shape->w = 3;
+            shape->h = 2;
+            shape->blocks[0] = 2;
+            shape->blocks[1] = 2;
 
-            shape->start[0]=1;
-            shape->start[1]=0;
+            shape->start[0] = 1;
+            shape->start[1] = 0;
 
-            shape->color=color;
+            shape->color = color;
             break;
         case 5:
-            shape->w=3;
-            shape->h=2;
-            shape->blocks[0]=1;
-            shape->blocks[1]=3;
+            shape->w = 3;
+            shape->h = 2;
+            shape->blocks[0] = 1;
+            shape->blocks[1] = 3;
 
-            shape->start[0]=1;
-            shape->start[1]=0;
+            shape->start[0] = 1;
+            shape->start[1] = 0;
 
-            shape->color=color;
+            shape->color = color;
             break;
         case 6:
-            shape->w=3;
-            shape->h=2;
-            shape->blocks[0]=2;
-            shape->blocks[1]=2;
+            shape->w = 3;
+            shape->h = 2;
+            shape->blocks[0] = 2;
+            shape->blocks[1] = 2;
 
-            shape->start[0]=0;
-            shape->start[1]=1;
+            shape->start[0] = 0;
+            shape->start[1] = 1;
 
-            shape->color=color;
+            shape->color = color;
             break;
     }
 }
 
-void flipShape(Shape *shape){
+void flipShape(Shape *shape) {
     //Invert height and width
-    int shapeGrid[4][4] = { 0 };
+    int shapeGrid[4][4] = {0};
 
     for (int i = 0; i < shape->h; ++i) {
-        for (int j = shape->start[i]; j < (shape->start[i]+shape->blocks[i]); ++j) {
-            shapeGrid[i][j]=1;
+        for (int j = shape->start[i]; j < (shape->start[i] + shape->blocks[i]); ++j) {
+            shapeGrid[i][j] = 1;
         }
-        
+
     }
-    int tempW=shape->w;
-    shape->w=shape->h;
-    shape->h=tempW;
+    int tempW = shape->w;
+    shape->w = shape->h;
+    shape->h = tempW;
     //Flip shape grid
     for (int x = 0; x < 2; x++) {
         for (int y = x; y < 3 - x; y++) {
@@ -111,38 +111,60 @@ void flipShape(Shape *shape){
 
         }
     }
+
+    //Print shape for debugging
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            printf("%i ",shapeGrid[i][j]);
+            printf("%i ", shapeGrid[i][j]);
         }
         printf("\n");
     }
     printf("\n");
-    memset(shape->blocks,0,sizeof shape->blocks);
-    memset(shape->start,0,sizeof shape->start);
-    int s=0;
+
+    //Clear everything
+    memset(shape->blocks, 0, sizeof shape->blocks);
+    memset(shape->start, 0, sizeof shape->start);
+
+    //New settings for the flipped shape
+    int s = 0;
     for (int i = 0; i < 4; i++) {
-        int blocks=0,start=0;
+        int blocks = 0, start = 0;
         for (int j = 0; j < 4; j++) {
-            if(shapeGrid[i][j]) blocks++;
-            if(!shapeGrid[i][j] && blocks==0) start++;
+            if (shapeGrid[i][j]) blocks++;
+            if (!shapeGrid[i][j] && blocks == 0) start++;
         }
-        if(blocks==0){
+        if (blocks == 0) {
             s++;
             continue;
-        }else{
-            shape->blocks[i-s]=blocks;
-            shape->start[i-s]=start;
+        } else {
+            shape->blocks[i - s] = blocks;
+            shape->start[i - s] = start;
         }
 
     }
 
 
-
 }
 
-bool Game_start(SDL_Renderer *renderer, int w, int h)
-{
+//Color and uncolor functions
+void colorBlocks(Shape shape, Grid *grid, int fallingBrickX, int fallingBrickY) {
+    for (int i = 0; i < shape.h; ++i) {
+        for (int j = 0; j < shape.blocks[i]; ++j) {
+            grid->cells[fallingBrickX + j + shape.start[i]][fallingBrickY + i].rectColor = shape.color;
+        }
+    }
+}
+
+void uncolorBlocks(Shape shape, Grid *grid, int fallingBrickX, int fallingBrickY) {
+    for (int i = 0; i < shape.h; ++i) {
+        for (int j = 0; j < shape.blocks[i]; ++j) {
+            grid->cells[fallingBrickX + j + shape.start[i]][fallingBrickY + i].rectColor = grid->backgroundColor;
+        }
+    }
+}
+
+
+bool Game_start(SDL_Renderer *renderer, int w, int h) {
     // Init grid
     Grid grid = {0};
 
@@ -153,8 +175,8 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
 
     // Set grid dimensions
     int margin = 50;
-    int cell_size = MIN( (w - margin * 2) / grid.xCells,
-                         (h - margin * 2) / grid.yCells );
+    int cell_size = MIN((w - margin * 2) / grid.xCells,
+                        (h - margin * 2) / grid.yCells);
     grid.rect.w = cell_size * grid.xCells;
     grid.rect.h = cell_size * grid.yCells;
 
@@ -175,10 +197,9 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     Grid_alignCenter(&grid, w, h);
 
     //Colors
-    int coloredCells[20]={0};
+    int coloredCells[20] = {0};
 
-    if(!Grid_init(&grid))
-    {
+    if (!Grid_init(&grid)) {
         fprintf(stderr, "Grid fail to initialize !\n");
         return false;
     }
@@ -196,16 +217,16 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     Shape shape;
 
     //Score
-    int score=0;
-    int level=0;
-    int lines=0;
+    int score = 0;
+    int level = 0;
+    int lines = 0;
 
     // Falling brick coordinates
     int fallingBrickX = grid.xCells / 2;
     int fallingBrickY = -1;
-    float fallingBrickSpeed = level+2;
-    int prevX=-1;
-    int prevY=-1;
+    float fallingBrickSpeed = level + 2;
+    int prevX = -1;
+    int prevY = -1;
 
     (void) prevX;
 
@@ -219,110 +240,83 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     bool quit = false;
 
     //Event pause
-    bool pause=false;
+    bool pause = false;
 
     //Generate shape
-    Generate_shape(0,&shape);
-
-
+    Generate_shape(rand() % 7, &shape);
 
     // Event loop
-    while(!quit)
-    {
+    while (!quit) {
         SDL_Event e;
         //Check colored blocks
-        bool colored=false;
+        bool colored = false;
         for (int i = 0; i < shape.h; ++i) {
             for (int j = 0; j < shape.blocks[i]; ++j) {
-                if(grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY + i+1].colored){
-                    colored=true;
+                if (grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY + i + 1].colored) {
+                    colored = true;
                 }
             }
         }
         // Get available event
-        while(SDL_PollEvent(&e))
-        {
+        while (SDL_PollEvent(&e)) {
             // User requests quit
-            if(e.type == SDL_QUIT)
-            {
+            if (e.type == SDL_QUIT) {
                 quit = true;
                 break;
-            }
-            else if(e.type == SDL_KEYDOWN)
-            {
+            } else if (e.type == SDL_KEYDOWN) {
                 //Check if block is colored on the left
-                bool coloredLeft=false;
+                bool coloredLeft = false;
                 for (int i = 0; i < shape.h; ++i) {
-                    if(grid.cells[fallingBrickX+shape.start[i]-1][fallingBrickY+i].colored){
-                        coloredLeft=true;
+                    if (grid.cells[fallingBrickX + shape.start[i] - 1][fallingBrickY + i].colored) {
+                        coloredLeft = true;
                     }
                 }
                 //Check if colored on the right
-                bool coloredRight=false;
+                bool coloredRight = false;
                 for (int i = 0; i < shape.h; ++i) {
-                    if(grid.cells[fallingBrickX+shape.start[i]+shape.blocks[i]+1][fallingBrickY+i].colored){
-                        coloredRight=true;
+                    if (grid.cells[fallingBrickX + shape.start[i] + shape.blocks[i] + 1][fallingBrickY + i].colored) {
+                        coloredRight = true;
                     }
                 }
-                switch (e.key.keysym.sym)
-                {
-                case SDLK_ESCAPE:
-                    pause = !pause;
-                    break;
+                switch (e.key.keysym.sym) {
+                    case SDLK_ESCAPE:
+                        //Pause or unpause the game
+                        pause = !pause;
+                        break;
 
-                case SDLK_RIGHT:
-                    //Move shape to the right
-                        if(fallingBrickY != -1 && fallingBrickX < grid.xCells - shape.w && !coloredRight)
-                    {
-                        // Un-color last position
-                        for (int i = 0; i < shape.h; ++i) {
+                    case SDLK_RIGHT:
+                        //Move shape to the right
+                        if (fallingBrickY != -1 && fallingBrickX < grid.xCells - shape.w && !coloredRight) {
+                            // Un-color last position
+                            uncolorBlocks(shape, &grid, fallingBrickX, fallingBrickY);
 
-                            for (int j = 0; j < shape.blocks[i]; ++j) {
-                                grid.cells[fallingBrickX + j+ shape.start[i]][fallingBrickY + i].rectColor = grid.backgroundColor;
-                            }
+                            // Color new position
+                            fallingBrickX++;
+                            colorBlocks(shape, &grid, fallingBrickX, fallingBrickY);
                         }
-                        // Color new position
-                        fallingBrickX++;
-                        for (int i = 0; i < shape.h; ++i) {
-                            for (int j = 0; j < shape.blocks[i]; ++j) {
-                                grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY + i].rectColor = shape.color;
-                            }
-                        }
-                    }
-                    break;
+                        break;
 
-                case SDLK_LEFT:
-                    //Move block to the left
-                    if(fallingBrickY != -1 && fallingBrickX > 0 && !coloredLeft)
-                    {
-                        // Un-color last position
-                        for (int i = 0; i < shape.h; ++i) {
-                            for (int j = 0; j < shape.blocks[i]; ++j) {
-                                grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY+ i].rectColor = grid.backgroundColor;
-                            }
+                    case SDLK_LEFT:
+                        //Move block to the left
+                        if (fallingBrickY != -1 && fallingBrickX > 0 && !coloredLeft) {
+                            // Un-color last position
+                            uncolorBlocks(shape, &grid, fallingBrickX, fallingBrickY);
+
+                            // Color new position
+                            fallingBrickX--;
+                            colorBlocks(shape, &grid, fallingBrickX, fallingBrickY);
                         }
-                        // Color new position
-                        fallingBrickX--;
-                        for (int i = 0; i < shape.h; ++i) {
-                            for (int j = 0; j < shape.blocks[i]; ++j) {
-                                grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY+i].rectColor = shape.color;
-                            }
-                        }
-                    }
-                    break;
+                        break;
                     case SDLK_DOWN:
                         //Increase falling speed
-                        fallingBrickSpeed+=2;
+                        fallingBrickSpeed += 2;
                         break;
                     case SDLK_SPACE:
-                        // Un-color last position
-                        for (int i = 0; i < shape.h; ++i) {
-                            for (int j = 0; j < shape.blocks[i]; ++j) {
-                                grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY+ i].rectColor = grid.backgroundColor;
-                            }
-                        }
-                        //Display shape in grid
-                        if(!colored){
+                        if (!colored) {
+                            // Un-color last position
+                            uncolorBlocks(shape, &grid, fallingBrickX, fallingBrickY);
+
+                            //Display shape in grid
                             flipShape(&shape);
                         }
                         break;
@@ -331,38 +325,28 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
         }
 
         // Move the falling brick
-        if(Utils_time() - last >= 1000 / fallingBrickSpeed && !pause)
-        {
+        if (Utils_time() - last >= 1000 / fallingBrickSpeed && !pause) {
 
-            if(fallingBrickY >=0 && fallingBrickY!=grid.yCells - shape.h && !colored)
-            {
+            if (fallingBrickY >= 0 && fallingBrickY != grid.yCells - shape.h && !colored) {
                 // Un-color the falling brick last position
-                for (int i = 0; i < shape.h; ++i) {
-                    for (int j = 0; j < shape.blocks[i]; ++j) {
-                        grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY + i].rectColor = grid.backgroundColor;
-                    }
-                }
+                uncolorBlocks(shape, &grid, fallingBrickX, fallingBrickY);
             }
-            //printf("Y:%i and COLORED:%i\n",fallingBrickY,colored);
-            if(fallingBrickY < grid.yCells - shape.h && !colored)
-            {
+
+            if (fallingBrickY < grid.yCells - shape.h && !colored) {
                 // Go to next position
                 fallingBrickY++;
+
                 // Color the falling brick new position
-                for (int i = 0; i < shape.h; ++i) {
-                    for (int j = 0; j < shape.blocks[i]; ++j) {
-                        grid.cells[fallingBrickX + j + shape.start[i]][fallingBrickY+i].rectColor = shape.color;
-                    }
-                }
-            }
-            else
-            {
-                if(fallingBrickY==-1){
+                colorBlocks(shape, &grid, fallingBrickX, fallingBrickY);
+
+            } else {
+                if (fallingBrickY == -1) {
                     printf("GAME OVER\n");
-                    quit=true;
-                }else {
+                    quit = true;
+                } else {
                     //Cleared lines
-                    int clrLines=0;
+                    int clrLines = 0;
+
                     //Tetris mechanics
                     for (int i = 0; i < shape.h; ++i) {
                         prevY = fallingBrickY + i;
@@ -377,6 +361,7 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                             if (coloredCells[prevY] == grid.xCells) {
                                 //Increase lines
                                 clrLines++;
+
                                 //Clear
                                 for (int j = 0; j < grid.xCells; ++j) {
                                     grid.cells[j][prevY].rectColor = grid.backgroundColor;
@@ -387,15 +372,17 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                                 for (int j = prevY; j > 0; --j) {
                                     //Reset counter
                                     coloredCells[j] = 0;
+
                                     for (int k = 0; k < grid.xCells; ++k) {
                                         //Swap colored state
                                         bool tempColored = grid.cells[k][j].colored;
                                         grid.cells[k][j].colored = grid.cells[k][j - 1].colored;
                                         grid.cells[k][j - 1].colored = tempColored;
+
                                         //Swap colors
-                                        SDL_Color tempColor=grid.cells[k][j].rectColor;
+                                        SDL_Color tempColor = grid.cells[k][j].rectColor;
                                         grid.cells[k][j].rectColor = grid.cells[k][j - 1].rectColor;
-                                        assign_color(&grid.cells[k][j - 1].rectColor,tempColor);
+                                        assign_color(&grid.cells[k][j - 1].rectColor, tempColor);
                                         //Colorise
                                         if (grid.cells[k][j].colored) {
                                             coloredCells[j]++;
@@ -404,28 +391,27 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                                 }
 
                             }
-                            }
                         }
-
-                    //Scoring and levels
-                    if(clrLines<4 && clrLines>0){
-                        score+=(100 + 200 * (clrLines-1)) * (level+1);
-                    }else if(clrLines==4){
-                        score+=800 * (level+1);
                     }
 
-                    lines+=clrLines;
-                    if(lines>10){
+                    //Scoring and levels
+                    if (clrLines < 4 && clrLines > 0) {
+                        score += (100 + 200 * (clrLines - 1)) * (level + 1);
+                    } else if (clrLines == 4) {
+                        score += 800 * (level + 1);
+                    }
+                    lines += clrLines;
+                    if (lines > 10) {
                         level++;
                     }
 
                     //Re-generate shape
-                    Generate_shape(rand()%7, &shape);
+                    Generate_shape(rand() % 7, &shape);
 
-                        // Reset position
-                        fallingBrickY = -1;
-                        fallingBrickX = grid.xCells / 2;
-                        fallingBrickSpeed = 2;
+                    // Reset position
+                    fallingBrickY = -1;
+                    fallingBrickX = grid.xCells / 2;
+                    fallingBrickSpeed = level + 2;
 
                 }
 
@@ -439,12 +425,14 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
 
         // Render grid
         Grid_render(&grid, renderer);
+
+        //Score settings
         char scoreStr[5];
         char msg[50];
         sprintf(scoreStr, "%d", score);
-        snprintf(msg, sizeof(msg), "%s%s", "TETRIS GAME || SCORE: ", scoreStr); 
+        snprintf(msg, sizeof(msg), "%s%s", "TETRIS GAME || SCORE: ", scoreStr);
 
-        // Show message
+        // Show score message
         stringRGBA(renderer, grid.rect.x + grid.xCells, grid.rect.y - 20,
                    msg,
                    COLOR_LIGHT_GRAY.r, COLOR_LIGHT_GRAY.g, COLOR_LIGHT_GRAY.b, COLOR_LIGHT_GRAY.a);
