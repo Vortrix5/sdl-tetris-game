@@ -218,6 +218,9 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
     // Event loop exit flag
     bool quit = false;
 
+    //Event pause
+    bool pause=false;
+
     //Generate shape
     Generate_shape(0,&shape);
 
@@ -264,7 +267,7 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                 switch (e.key.keysym.sym)
                 {
                 case SDLK_ESCAPE:
-                    quit = true;
+                    pause = !pause;
                     break;
 
                 case SDLK_RIGHT:
@@ -328,7 +331,7 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
         }
 
         // Move the falling brick
-        if(Utils_time() - last >= 1000 / fallingBrickSpeed)
+        if(Utils_time() - last >= 1000 / fallingBrickSpeed && !pause)
         {
 
             if(fallingBrickY >=0 && fallingBrickY!=grid.yCells - shape.h && !colored)
@@ -358,6 +361,8 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                     printf("GAME OVER\n");
                     quit=true;
                 }else {
+                    //Cleared lines
+                    int clrLines=0;
                     //Tetris mechanics
                     for (int i = 0; i < shape.h; ++i) {
                         prevY = fallingBrickY + i;
@@ -371,8 +376,7 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                             //Verification
                             if (coloredCells[prevY] == grid.xCells) {
                                 //Increase lines
-                                lines++;
-                                score+=40 * (level + 1);
+                                clrLines++;
                                 //Clear
                                 for (int j = 0; j < grid.xCells; ++j) {
                                     grid.cells[j][prevY].rectColor = grid.backgroundColor;
@@ -403,13 +407,21 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
                             }
                         }
 
-                        //Re-generate Shape
-                        Generate_shape(rand()%7, &shape);
+                    //Scoring and levels
+                    if(clrLines<4 && clrLines>0){
+                        score+=(100 + 200 * (clrLines-1)) * (level+1);
+                    }else if(clrLines==4){
+                        score+=800 * (level+1);
+                    }
 
-                        //Levels
-                        if(lines>10){
-                            level++;
-                        }
+                    lines+=clrLines;
+                    if(lines>10){
+                        level++;
+                    }
+
+                    //Re-generate shape
+                    Generate_shape(rand()%7, &shape);
+
                         // Reset position
                         fallingBrickY = -1;
                         fallingBrickX = grid.xCells / 2;
@@ -430,16 +442,13 @@ bool Game_start(SDL_Renderer *renderer, int w, int h)
         char scoreStr[5];
         char msg[50];
         sprintf(scoreStr, "%d", score);
-        snprintf(msg, sizeof(msg), "%s%s", "TETRIS GAME || SCORE: ", scoreStr);
+        snprintf(msg, sizeof(msg), "%s%s", "TETRIS GAME || SCORE: ", scoreStr); 
 
         // Show message
         stringRGBA(renderer, grid.rect.x + grid.xCells, grid.rect.y - 20,
                    msg,
                    COLOR_LIGHT_GRAY.r, COLOR_LIGHT_GRAY.g, COLOR_LIGHT_GRAY.b, COLOR_LIGHT_GRAY.a);
-        //Display score
-            /*stringRGBA(renderer, grid.rect.x + grid.xCells, grid.rect.y - 20,
-                   scoreStr,
-                   COLOR_LIGHT_GRAY.r, COLOR_LIGHT_GRAY.g, COLOR_LIGHT_GRAY.b, COLOR_LIGHT_GRAY.a);*/
+
 
         // Update screen
         SDL_RenderPresent(renderer);

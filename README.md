@@ -1,4 +1,3 @@
-
 # SDL Tetris Game 🕹️
 
 Welcome to the Tetris game developed entirely in **C** using the **SD2L** library! As a classic puzzle game, Tetris is sure to provide hours of entertainment as players work to clear the board by fitting falling Tetrominoes into the grid.
