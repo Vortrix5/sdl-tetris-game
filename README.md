@@ -1,4 +1,8 @@
 # SDL Tetris Game 🕹️
+[![C Language](https://img.shields.io/badge/C-17.0.0-red?style=flat-square)](https://en.wikipedia.org/wiki/C_(programming_language))
+[![SDL2 Version](https://img.shields.io/badge/SDL2-2.26.1-blue?style=flat-square)](https://www.libsdl.org/)
+[![basic-c-sdl-game Version](https://img.shields.io/badge/basic--c--sdl--game-aminosbh-green?style=flat-square)](https://github.com/aminosbh/basic-c-sdl-game)
+[![License](https://img.shields.io/github/license/Vortrix5/sdl-tetris-game?style=flat-square)](https://github.com/Vortrix5/sdl-tetris-game/blob/master/LICENSE)
 
 Welcome to the Tetris game developed entirely in **C** using the **SD2L** library! As a classic puzzle game, Tetris is sure to provide hours of entertainment as players work to clear the board by fitting falling Tetrominoes into the grid.
 
